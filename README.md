@@ -55,7 +55,7 @@ It includes product management, user authentication, and a built-in admin/user d
 
 * Node.js / Express.js
 * TypeScript
-* Prisma ORM
+* typeOrm
 * PostgreSQL
 * Zod (Validation)
 * JWT Authentication
@@ -91,14 +91,15 @@ akanjo-ko/
 ├── backend/
 │   ├── package.json
 │   ├── tsconfig.json
-│   ├── prisma/
-│   │   └── schema.prisma
+│   ├── .env.exemple
 │   └── src/
+│       ├── config/
 │       ├── controllers/
-│       ├── services/
-│       ├── repositories/
+│       ├── entities/
 │       ├── routes/
-│       ├── middlewares/
+│       ├── services/
+│       ├── middlwares/
+│       ├── server.ts
 │       └── app.ts
 │
 └── infrastructure/
@@ -128,7 +129,6 @@ Follows **clean architecture (MVC + layered):**
 
 * Controllers → Request handlers
 * Services → Business logic
-* Repositories → Prisma database access
 * Routes → API endpoints
 * Middlewares → Auth, validation, errors
 
@@ -160,7 +160,6 @@ Backend:
 
 ```bash
 cd backend
-npx prisma generate
 npm run dev
 ```
 
