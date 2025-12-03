@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  OneToMany,
+} from "typeorm";
+import { Order } from "./Order";
+import { Discussion } from "./Discussion";
 
 @Entity()
 export class User {
@@ -8,6 +16,22 @@ export class User {
   @Column()
   name!: string;
 
-  @Column()
+  @Column({ unique: true })
   email!: string;
+
+  @Column()
+  password!: string;
+
+  @Column({ default: "user" })
+  role!: "user" | "admin";
+
+  @CreateDateColumn()
+  created_at!: Date;
+
+  // Relations
+  @OneToMany(() => Order, (order) => order.user)
+  orders!: Order[];
+
+  @OneToMany(() => Discussion, (discussion) => discussion.user)
+  discussions!: Discussion[];
 }
