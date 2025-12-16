@@ -18,12 +18,11 @@ export class Order {
   total!: number;
 
   @Column()
-  status!: string; // pending, completed...
+  status!: string;
 
   @CreateDateColumn()
   created_at!: Date;
 
-  // Relations
   @ManyToOne(() => User, (user) => user.orders, { onDelete: "CASCADE" })
   user!: User;
 

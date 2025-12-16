@@ -22,7 +22,6 @@ export class Discussion {
   @CreateDateColumn()
   created_at!: Date;
 
-  // Relations
   @ManyToOne(() => User, (user) => user.discussions, { onDelete: "CASCADE" })
   user!: User;
 

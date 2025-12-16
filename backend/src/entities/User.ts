@@ -28,7 +28,6 @@ export class User {
   @CreateDateColumn()
   created_at!: Date;
 
-  // Relations
   @OneToMany(() => Order, (order) => order.user)
   orders!: Order[];
 

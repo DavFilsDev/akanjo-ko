@@ -18,7 +18,6 @@ export class OrderItem {
   @Column("float")
   price!: number;
 
-  // Relations
   @ManyToOne(() => Order, (order) => order.items, { onDelete: "CASCADE" })
   order!: Order;
 

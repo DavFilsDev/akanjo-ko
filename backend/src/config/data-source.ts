@@ -2,7 +2,6 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import dotenv from "dotenv";
 
-// Import des entités
 import { User } from "../entities/User";
 import { Product } from "../entities/Product";
 import { Order } from "../entities/Order";
@@ -19,13 +18,11 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 
-  // ⚠️ Pendant le développement SEULEMENT
   synchronize: true,
-  dropSchema: true, // 👈 supprime toutes les tables avant de recréer
+  dropSchema: true, 
 
   logging: false,
 
-  // 👇 Toutes les entités ici
   entities: [
     User,
     Product,

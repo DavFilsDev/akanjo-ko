@@ -29,10 +29,10 @@ export class Product {
   category!: string;
 
   @Column()
-  gender!: string; // homme / femme
+  gender!: string;
 
   @Column()
-  age_group!: string; // adulte / enfant
+  age_group!: string;
 
   @Column({ default: true })
   available!: boolean;
@@ -43,7 +43,6 @@ export class Product {
   @CreateDateColumn()
   created_at!: Date;
 
-  // Relations
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   order_items!: OrderItem[];
 
