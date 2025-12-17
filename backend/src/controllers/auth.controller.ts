@@ -4,6 +4,7 @@ import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { RegisterDto } from "../dto/register.dto";
 import { LoginDto } from "../dto/login.dto";
+import { AuthRequest } from "../middleware/auth.middleware";
 
 export class AuthController {
   private authService: AuthService;
@@ -70,4 +71,16 @@ export class AuthController {
       }
     }
   };
+
+  me = async (req: AuthRequest, res: Response): Promise<void> => {
+  if (!req.user) {
+    res.status(401).json({ message: "Unauthorized" });
+    return;
+  }
+
+  res.status(200).json({
+    message: "User data retrieved successfully",
+    user: req.user,
+  });
+};
 }
