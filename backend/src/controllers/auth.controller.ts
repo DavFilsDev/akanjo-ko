@@ -3,6 +3,7 @@ import { AuthService } from "../services/auth.service";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
 import { RegisterDto } from "../dto/register.dto";
+import { LoginDto } from "../dto/login.dto";
 
 export class AuthController {
   private authService: AuthService;
@@ -35,6 +36,35 @@ export class AuthController {
     } catch (error: any) {
       if (error.message === "Email already in use") {
         res.status(409).json({ message: error.message });
+      } else {
+        res.status(500).json({ message: "Internal server error" });
+      }
+    }
+  };
+
+  login = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const loginDto = plainToInstance(LoginDto, req.body);
+      const errors = await validate(loginDto);
+
+      if (errors.length > 0) {
+        res.status(400).json({
+          message: "Validation failed",
+          errors: errors.map((err) => Object.values(err.constraints || {})),
+        });
+        return;
+      }
+
+      const { user, token } = await this.authService.login(loginDto);
+
+      res.status(200).json({
+        message: "Login successful",
+        token,
+        user,
+      });
+    } catch (error: any) {
+      if (error.message === "Invalid email or password") {
+        res.status(401).json({ message: error.message });
       } else {
         res.status(500).json({ message: "Internal server error" });
       }
