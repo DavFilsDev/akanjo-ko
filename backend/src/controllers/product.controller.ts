@@ -1,4 +1,3 @@
-// src/controllers/product.controller.ts
 import { Request, Response } from "express";
 import { getAllProducts } from "../services/product.service";
 
