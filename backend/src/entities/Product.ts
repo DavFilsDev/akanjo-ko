@@ -22,7 +22,7 @@ export class Product {
   @Column("float")
   price!: number;
 
-  @Column("int")
+  @Column("int", { default: 0 })
   stock!: number;
 
   @Column()
