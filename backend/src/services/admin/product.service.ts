@@ -26,3 +26,24 @@ export const createProductService = async (data: CreateProductDTO) => {
 
   return await productRepo.save(product);
 };
+
+export const updateProductService = async (
+  productId: number,
+  data: Partial<Product>
+) => {
+  const productRepo = AppDataSource.getRepository(Product);
+
+  const product = await productRepo.findOneBy({ id: productId });
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  Object.assign(product, data);
+
+  if (data.stock !== undefined) {
+    product.available = data.stock > 0;
+  }
+
+  return await productRepo.save(product);
+};
