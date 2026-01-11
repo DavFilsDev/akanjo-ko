@@ -47,3 +47,17 @@ export const updateProductService = async (
 
   return await productRepo.save(product);
 };
+
+export const deleteProductService = async (productId: number) => {
+  const productRepo = AppDataSource.getRepository(Product);
+
+  const product = await productRepo.findOneBy({ id: productId });
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  await productRepo.remove(product);
+
+  return product;
+};
