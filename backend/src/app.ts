@@ -1,5 +1,5 @@
 import express from "express";
-import authRoutes from "./routes/auth.routes";
+import authRoutes from "./routes/auth/auth.routes";
 import productRoutes from "./routes/public/product.routes";
 import adminProductRoutes from "./routes/admin/product.routes";
 import cartRoutes from "./routes/public/cart.routes";
