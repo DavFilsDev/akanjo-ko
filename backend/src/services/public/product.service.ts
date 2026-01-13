@@ -1,5 +1,5 @@
-import { AppDataSource } from "../config/data-source";
-import { Product } from "../entities/Product";
+import { AppDataSource } from "../../config/data-source";
+import { Product } from "../../entities/Product";
 
 interface ProductFilters {
   category?: string;
