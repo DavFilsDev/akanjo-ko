@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { AuthRequest } from "../middleware/auth.middleware";
-import { getOrCreateCartService, addItemToCartService } from "../services/cart.service";
+import { AuthRequest } from "../../middleware/auth.middleware";
+import { getOrCreateCartService, addItemToCartService } from "../../services/cart.service";
 
 export const getCurrentCart = async (
   req: AuthRequest,
