@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "../../services/auth/auth.service";
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import { RegisterDto } from "../dto/register.dto";
-import { LoginDto } from "../dto/login.dto";
-import { AuthRequest } from "../middleware/auth.middleware";
+import { RegisterDto } from "../../dto/register.dto";
+import { LoginDto } from "../../dto/login.dto";
+import { AuthRequest } from "../../middleware/auth.middleware";
 
 export class AuthController {
   private authService: AuthService;
