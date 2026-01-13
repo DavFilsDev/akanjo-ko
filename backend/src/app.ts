@@ -1,8 +1,8 @@
 import express from "express";
 import authRoutes from "./routes/auth.routes";
-import productRoutes from "./routes/product.routes";
+import productRoutes from "./routes/public/product.routes";
 import adminProductRoutes from "./routes/admin/product.routes";
-import cartRoutes from "./routes/cart.routes";
+import cartRoutes from "./routes/public/cart.routes";
 
 const app = express();
 
