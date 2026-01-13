@@ -1,8 +1,8 @@
-import { AppDataSource } from "../config/data-source";
-import { Order } from "../entities/Order";
-import { User } from "../entities/User";
-import { OrderItem } from "../entities/OrderItem";
-import { Product } from "../entities/Product";
+import { AppDataSource } from "../../config/data-source";
+import { Order } from "../../entities/Order";
+import { User } from "../../entities/User";
+import { OrderItem } from "../../entities/OrderItem";
+import { Product } from "../../entities/Product";
 
 export const getOrCreateCartService = async (user: User) => {
   const orderRepo = AppDataSource.getRepository(Order);
