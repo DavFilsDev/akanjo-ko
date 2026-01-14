@@ -4,7 +4,8 @@ import {  getOrCreateCartService,
           addItemToCartService, 
           removeCartItemService, 
           updateCartItemQuantityService,
-          clearCart
+          clearCart,
+          checkoutService
         } from "../../services/public/cart.service";
 
 export const getCurrentCart = async (
@@ -143,3 +144,26 @@ export const clearCartController = async (
     });
   }
 };
+
+export const checkoutController = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user!.id;
+
+    const order = await checkoutService(userId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Checkout successful",
+      data: order,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Checkout failed",
+    });
+  }
+};
+
