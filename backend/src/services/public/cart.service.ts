@@ -92,3 +92,47 @@ export const addItemToCartService = async (
 
   return cart;
 };
+
+export const removeCartItemService = async (
+  userId: number,
+  itemId: number
+) => {
+  const orderRepo = AppDataSource.getRepository(Order);
+  const itemRepo = AppDataSource.getRepository(OrderItem);
+
+  // Trouver le panier actif
+  const cart = await orderRepo.findOne({
+    where: {
+      user: { id: userId },
+      status: "cart",
+    },
+    relations: ["items", "items.product"],
+  });
+
+  if (!cart) {
+    throw new Error("Cart not found");
+  }
+
+  // Trouver l’item
+  const item = cart.items.find((i) => i.id === itemId);
+
+  if (!item) {
+    throw new Error("Cart item not found");
+  }
+
+  // Supprimer l’item
+  await itemRepo.remove(item);
+
+  // Recalculer le total
+  cart.items = cart.items.filter((i) => i.id !== itemId);
+
+  cart.total = cart.items.reduce(
+    (sum, i) => sum + i.quantity * i.price,
+    0
+  );
+
+  // Sauvegarder le panier
+  await orderRepo.save(cart);
+
+  return cart;
+};
