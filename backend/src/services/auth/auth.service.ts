@@ -1,8 +1,8 @@
-import { AppDataSource } from "../config/data-source";
-import { User } from "../entities/User";
+import { AppDataSource } from "../../config/data-source";
+import { User } from "../../entities/User";
 import { Repository } from "typeorm";
-import { RegisterDto } from "../dto/register.dto";
-import { LoginDto } from "../dto/login.dto"
+import { RegisterDto } from "../../dto/register.dto";
+import { LoginDto } from "../../dto/login.dto"
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
