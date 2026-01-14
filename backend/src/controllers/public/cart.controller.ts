@@ -1,6 +1,10 @@
 import { Response } from "express";
 import { AuthRequest } from "../../middleware/auth.middleware";
-import { getOrCreateCartService, addItemToCartService, removeCartItemService } from "../../services/public/cart.service";
+import {  getOrCreateCartService, 
+          addItemToCartService, 
+          removeCartItemService, 
+          updateCartItemQuantityService 
+        } from "../../services/public/cart.service";
 
 export const getCurrentCart = async (
   req: AuthRequest,
@@ -80,6 +84,40 @@ export const removeCartItem = async (req: AuthRequest, res: Response) => {
     return res.status(400).json({
       success: false,
       message: error.message || "Failed to remove item",
+    });
+  }
+};
+
+export const updateCartItemQuantity = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const itemId = Number(req.params.id);
+    const { quantity } = req.body;
+
+    if (quantity === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Quantity is required",
+      });
+    }
+
+    const cart = await updateCartItemQuantityService(
+      req.user!.id,
+      itemId,
+      quantity
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Cart item updated",
+      data: cart,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Failed to update cart item",
     });
   }
 };
