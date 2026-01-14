@@ -136,3 +136,56 @@ export const removeCartItemService = async (
 
   return cart;
 };
+
+export const updateCartItemQuantityService = async (
+  userId: number,
+  itemId: number,
+  quantity: number
+) => {
+  const orderRepo = AppDataSource.getRepository(Order);
+  const itemRepo = AppDataSource.getRepository(OrderItem);
+
+  const cart = await orderRepo.findOne({
+    where: {
+      user: { id: userId },
+      status: "cart",
+    },
+    relations: ["items", "items.product"],
+  });
+
+  if (!cart) {
+    throw new Error("Cart not found");
+  }
+
+  const item = cart.items.find((i) => i.id === itemId);
+
+  if (!item) {
+    throw new Error("Item not found in cart");
+  }
+
+  // si quantité <= 0 → supprimer l’item
+  if (quantity <= 0) {
+    await itemRepo.remove(item);
+  } else {
+    item.quantity = quantity;
+    await itemRepo.save(item);
+  }
+
+  // Recalcul du total
+  const updatedItems = await itemRepo.find({
+    where: { order: { id: cart.id } },
+    relations: ["product"],
+  });
+
+  cart.total = updatedItems.reduce(
+    (sum, i) => sum + i.quantity * i.price,
+    0
+  );
+
+  await orderRepo.save(cart);
+
+  return {
+    ...cart,
+    items: updatedItems,
+  };
+};
