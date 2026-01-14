@@ -3,7 +3,8 @@ import { AuthRequest } from "../../middleware/auth.middleware";
 import {  getOrCreateCartService, 
           addItemToCartService, 
           removeCartItemService, 
-          updateCartItemQuantityService 
+          updateCartItemQuantityService,
+          clearCart
         } from "../../services/public/cart.service";
 
 export const getCurrentCart = async (
@@ -118,6 +119,27 @@ export const updateCartItemQuantity = async (
     return res.status(400).json({
       success: false,
       message: error.message || "Failed to update cart item",
+    });
+  }
+};
+
+export const clearCartController = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const userId = req.user!.id;
+
+    await clearCart(userId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Cart cleared successfully",
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      message: error.message || "Failed to clear cart",
     });
   }
 };
