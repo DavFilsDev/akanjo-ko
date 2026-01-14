@@ -189,3 +189,30 @@ export const updateCartItemQuantityService = async (
     items: updatedItems,
   };
 };
+
+export const clearCart = async (userId: number) => {
+  const orderRepo = AppDataSource.getRepository(Order);
+  const itemRepo = AppDataSource.getRepository(OrderItem);
+
+  // Find active cart
+  const cart = await orderRepo.findOne({
+    where: {
+      user: { id: userId },
+      status: "cart",
+    },
+    relations: ["items"],
+  });
+
+  if (!cart) {
+    return; // idempotent: cart already empty
+  }
+
+  // Remove all items
+  await itemRepo.remove(cart.items);
+
+  // Reset total
+  cart.total = 0;
+  cart.items = [];
+
+  await orderRepo.save(cart);
+};
