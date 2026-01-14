@@ -216,3 +216,55 @@ export const clearCart = async (userId: number) => {
 
   await orderRepo.save(cart);
 };
+
+export const checkoutService = async (userId: number) => {
+  return await AppDataSource.transaction(async (manager) => {
+    const orderRepo = manager.getRepository(Order);
+    const productRepo = manager.getRepository(Product);
+
+    // Trouver le panier
+    const cart = await orderRepo.findOne({
+      where: {
+        user: { id: userId },
+        status: "cart",
+      },
+      relations: ["items", "items.product"],
+    });
+
+    if (!cart) {
+      throw new Error("Cart not found");
+    }
+
+    if (cart.items.length === 0) {
+      throw new Error("Cart is empty");
+    }
+
+    // Vérifier le stock
+    for (const item of cart.items) {
+      if (item.product.stock < item.quantity) {
+        throw new Error(
+          `Insufficient stock for product: ${item.product.name}`
+        );
+      }
+    }
+
+    // Décrémenter le stock
+    for (const item of cart.items) {
+      item.product.stock -= item.quantity;
+      await productRepo.save(item.product);
+    }
+
+    // Recalculer le total (sécurité)
+    cart.total = cart.items.reduce(
+      (sum, i) => sum + i.quantity * i.price,
+      0
+    );
+
+    // Convertir en commande
+    cart.status = "pending"; // or "paid" later
+
+    await orderRepo.save(cart);
+
+    return cart;
+  });
+};
